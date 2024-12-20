@@ -9,10 +9,12 @@ public class TagsDrawer : ITagsDrawer
 
     public TagsDrawer(ITagsColorConfig colorConfig)
     {
+        ArgumentNullException.ThrowIfNull(colorConfig);
+
         _colorConfig = colorConfig;
     }
 
-    public Image Draw(IList<TagDrawing> tagsWithSettings)
+    public Bitmap Draw(IList<TagDrawing> tagsWithSettings)
     {
         ArgumentNullException.ThrowIfNull(tagsWithSettings);
 
@@ -27,6 +29,11 @@ public class TagsDrawer : ITagsDrawer
 
     private Size GetImageSizeToFitTags(IList<TagDrawing> tagsWithSettings)
     {
+        if (tagsWithSettings.Count == 0)
+        {
+            return new Size(1, 1);
+        }
+
         var width = 2 * tagsWithSettings
             .Max(tag => Math.Max(Math.Abs(tag.Tag.Rectangle.Left), tag.Tag.Rectangle.Right));
         var height = 2 * tagsWithSettings
@@ -45,15 +52,15 @@ public class TagsDrawer : ITagsDrawer
     {
         using var graphics = Graphics.FromImage(image);
 
-        foreach (var tag in CenterTags(image, tags))
+        foreach (var tag in CenterTags(image.Size, tags))
         {
-            tag.Draw(graphics);
+            Draw(graphics, tag);
         }
     }
 
-    private IEnumerable<TagDrawing> CenterTags(Image image, IList<TagDrawing> tags)
+    private IEnumerable<TagDrawing> CenterTags(Size imageSize, IList<TagDrawing> tags)
     {
-        var delta = new Size(image.Width / 2, image.Height / 2);
+        var delta = new Size(imageSize.Width / 2, imageSize.Height / 2);
 
         return tags
             .Select(tagDrawing => tagDrawing with
@@ -66,5 +73,11 @@ public class TagsDrawer : ITagsDrawer
                     },
                 },
             });
+    }
+
+    private void Draw(Graphics graphics, TagDrawing tag)
+    {
+        using var font = new Font(tag.FontName, tag.Tag.Rectangle.Height, tag.FontStyle, GraphicsUnit.Pixel);
+        graphics.DrawString(tag.Tag.Word, font, tag.Brush, tag.Tag.Rectangle.Location);
     }
 }

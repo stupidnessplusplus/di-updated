@@ -19,30 +19,37 @@ public class TagsCloudCreator
         IEnumerable<ITagsDrawingDecorator> tagsSettingsSetters,
         ITagsDrawer tagsDrawer)
     {
+        ArgumentNullException.ThrowIfNull(wordSizesGetter);
+        ArgumentNullException.ThrowIfNull(cloudLayouter);
+        ArgumentNullException.ThrowIfNull(tagsSettingsSetters);
+        ArgumentNullException.ThrowIfNull(tagsDrawer);
+
         _wordSizesGetter = wordSizesGetter;
         _cloudLayouter = cloudLayouter;
         _tagsSettingsSetters = tagsSettingsSetters;
         _tagsDrawer = tagsDrawer;
     }
 
-    public Image DrawTagsCloud(IList<string> words)
+    public Bitmap DrawTagsCloud(IList<string> words)
     {
+        ArgumentNullException.ThrowIfNull(words);
+
         var tags = _wordSizesGetter
             .GetSizes(words)
             .Select(unplacedTag => new Tag(unplacedTag.Word, _cloudLayouter.PutNextRectangle(unplacedTag.Size)))
             .ToArray();
 
-        var tagsWithSettings = GetTagsWithSettings(tags);
-        return _tagsDrawer.Draw(tagsWithSettings);
+        var tagDrawings = GetTagDrawings(tags);
+        return _tagsDrawer.Draw(tagDrawings);
     }
 
-    private TagDrawing[] GetTagsWithSettings(IList<Tag> tags)
+    private TagDrawing[] GetTagDrawings(IList<Tag> tags)
     {
-        var tagsWithSettings = tags
+        var tagDrawings = tags
             .Select(tag => new TagDrawing(tag, default!, default!, default))
             .ToArray();
 
         return _tagsSettingsSetters
-            .Aggregate(tagsWithSettings, (tags, setter) => setter.Decorate(tags));
+            .Aggregate(tagDrawings, (tags, setter) => setter.Decorate(tags));
     }
 }

@@ -4,5 +4,5 @@ namespace TagsCloudCreation.TagsDrawers;
 
 public interface ITagsDrawer
 {
-    public Image Draw(IList<TagDrawing> tags);
+    public Bitmap Draw(IList<TagDrawing> tags);
 }
