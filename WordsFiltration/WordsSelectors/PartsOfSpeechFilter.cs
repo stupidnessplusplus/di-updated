@@ -5,20 +5,20 @@ namespace WordsFiltration.WordsSelectors;
 
 public class PartsOfSpeechFilter : IWordsSelector
 {
-    private readonly IWordsSelectionConfig _wordsSelectionConfig;
+    private readonly IWordsSelectionConfig wordsSelectionConfig;
 
     public PartsOfSpeechFilter(IWordsSelectionConfig wordsSelectionConfig)
     {
         ArgumentNullException.ThrowIfNull(wordsSelectionConfig);
 
-        _wordsSelectionConfig = wordsSelectionConfig;
+        this.wordsSelectionConfig = wordsSelectionConfig;
     }
 
     public IEnumerable<string> Select(IEnumerable<string> words)
     {
         ArgumentNullException.ThrowIfNull(words);
 
-        var includedPartsOfSpeech = _wordsSelectionConfig.IncludedPartsOfSpeech?.ToHashSet();
+        var includedPartsOfSpeech = wordsSelectionConfig.IncludedPartsOfSpeech?.ToHashSet();
 
         if (includedPartsOfSpeech == null)
         {

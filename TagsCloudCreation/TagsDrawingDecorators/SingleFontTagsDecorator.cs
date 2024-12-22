@@ -4,13 +4,13 @@ namespace TagsCloudCreation.TagsDrawingDecorators;
 
 public class SingleFontTagsDecorator : ITagsDrawingDecorator
 {
-    private readonly ITagsFontConfig _fontConfig;
+    private readonly ITagsFontConfig fontConfig;
 
     public SingleFontTagsDecorator(ITagsFontConfig fontConfig)
     {
         ArgumentNullException.ThrowIfNull(fontConfig);
 
-        _fontConfig = fontConfig;
+        this.fontConfig = fontConfig;
     }
 
     public TagDrawing[] Decorate(IList<TagDrawing> tags)
@@ -20,8 +20,8 @@ public class SingleFontTagsDecorator : ITagsDrawingDecorator
         return tags
             .Select(tag => tag with
             {
-                FontName = _fontConfig.FontName,
-                FontStyle = _fontConfig.FontStyle,
+                FontName = fontConfig.FontName,
+                FontStyle = fontConfig.FontStyle,
             })
             .ToArray();
     }

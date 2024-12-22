@@ -8,10 +8,10 @@ namespace TagsCloudCreation;
 
 public class TagsCloudCreator
 {
-    private readonly IWordSizesGetter _wordSizesGetter;
-    private readonly ICircularCloudLayouter _cloudLayouter;
-    private readonly IEnumerable<ITagsDrawingDecorator> _tagsSettingsSetters;
-    private readonly ITagsDrawer _tagsDrawer;
+    private readonly IWordSizesGetter wordSizesGetter;
+    private readonly ICircularCloudLayouter cloudLayouter;
+    private readonly IEnumerable<ITagsDrawingDecorator> tagsSettingsSetters;
+    private readonly ITagsDrawer tagsDrawer;
 
     public TagsCloudCreator(
         IWordSizesGetter wordSizesGetter,
@@ -24,23 +24,23 @@ public class TagsCloudCreator
         ArgumentNullException.ThrowIfNull(tagsSettingsSetters);
         ArgumentNullException.ThrowIfNull(tagsDrawer);
 
-        _wordSizesGetter = wordSizesGetter;
-        _cloudLayouter = cloudLayouter;
-        _tagsSettingsSetters = tagsSettingsSetters;
-        _tagsDrawer = tagsDrawer;
+        this.wordSizesGetter = wordSizesGetter;
+        this.cloudLayouter = cloudLayouter;
+        this.tagsSettingsSetters = tagsSettingsSetters;
+        this.tagsDrawer = tagsDrawer;
     }
 
     public Bitmap DrawTagsCloud(IList<string> words)
     {
         ArgumentNullException.ThrowIfNull(words);
 
-        var tags = _wordSizesGetter
+        var tags = wordSizesGetter
             .GetSizes(words)
-            .Select(unplacedTag => new Tag(unplacedTag.Word, _cloudLayouter.PutNextRectangle(unplacedTag.Size)))
+            .Select(unplacedTag => new Tag(unplacedTag.Word, cloudLayouter.PutNextRectangle(unplacedTag.Size)))
             .ToArray();
 
         var tagDrawings = GetTagDrawings(tags);
-        return _tagsDrawer.Draw(tagDrawings);
+        return tagsDrawer.Draw(tagDrawings);
     }
 
     private TagDrawing[] GetTagDrawings(IList<Tag> tags)
@@ -49,7 +49,7 @@ public class TagsCloudCreator
             .Select(tag => new TagDrawing(tag, default!, default!, default))
             .ToArray();
 
-        return _tagsSettingsSetters
+        return tagsSettingsSetters
             .Aggregate(tagDrawings, (tags, setter) => setter.Decorate(tags));
     }
 }

@@ -5,13 +5,13 @@ namespace TagsCloudCreation.TagsDrawers;
 
 public class TagsDrawer : ITagsDrawer
 {
-    private readonly ITagsColorConfig _colorConfig;
+    private readonly ITagsColorConfig colorConfig;
 
     public TagsDrawer(ITagsColorConfig colorConfig)
     {
         ArgumentNullException.ThrowIfNull(colorConfig);
 
-        _colorConfig = colorConfig;
+        this.colorConfig = colorConfig;
     }
 
     public Bitmap Draw(IList<TagDrawing> tagsWithSettings)
@@ -21,7 +21,7 @@ public class TagsDrawer : ITagsDrawer
         var imageSize = GetImageSizeToFitTags(tagsWithSettings);
         var image = new Bitmap(imageSize.Width, imageSize.Height);
 
-        FillBackground(image, _colorConfig.BackgroundColor);
+        FillBackground(image, colorConfig.BackgroundColor);
         DrawTags(image, tagsWithSettings);
 
         return image;

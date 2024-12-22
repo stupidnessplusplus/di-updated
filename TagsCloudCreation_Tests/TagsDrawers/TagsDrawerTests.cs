@@ -9,18 +9,18 @@ namespace TagsCloudCreation_Tests.TagsDrawers;
 [TestFixture]
 internal class TagsDrawerTests
 {
-    private static readonly Color _backgroundColor = Color.FromArgb(255, 255, 255);
+    private static readonly Color backgroundColor = Color.FromArgb(255, 255, 255);
 
-    private ITagsColorConfig _tagsColorConfig;
-    private ITagsDrawer _tagsDrawer;
+    private ITagsColorConfig tagsColorConfig;
+    private ITagsDrawer tagsDrawer;
 
     [SetUp]
     public void SetUp()
     {
-        _tagsColorConfig = A.Fake<ITagsColorConfig>();
-        A.CallTo(() => _tagsColorConfig.BackgroundColor).Returns(_backgroundColor);
+        tagsColorConfig = A.Fake<ITagsColorConfig>();
+        A.CallTo(() => tagsColorConfig.BackgroundColor).Returns(backgroundColor);
 
-        _tagsDrawer = new TagsDrawer(_tagsColorConfig);
+        tagsDrawer = new TagsDrawer(tagsColorConfig);
     }
 
     [Test]
@@ -33,7 +33,7 @@ internal class TagsDrawerTests
     [Test]
     public void Draw_ThrowsException_WhenTagsListIsNull()
     {
-        var decorate = () => _tagsDrawer.Draw(null!);
+        var decorate = () => tagsDrawer.Draw(null!);
         decorate.Should().Throw<ArgumentNullException>();
     }
 
@@ -42,7 +42,7 @@ internal class TagsDrawerTests
     {
         var expectedSize = new Size(1, 1);
 
-        var image = _tagsDrawer.Draw([]);
+        var image = tagsDrawer.Draw([]);
 
         image.Size.Should().Be(expectedSize);
     }
@@ -50,8 +50,8 @@ internal class TagsDrawerTests
     [Test]
     public void Draw_SetsImageBackgroundColor()
     {
-        var image = _tagsDrawer.Draw([]);
+        var image = tagsDrawer.Draw([]);
 
-        image.GetPixel(0, 0).Should().Be(_backgroundColor);
+        image.GetPixel(0, 0).Should().Be(backgroundColor);
     }
 }

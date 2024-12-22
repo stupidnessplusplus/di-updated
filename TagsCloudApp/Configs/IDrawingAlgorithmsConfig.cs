@@ -5,17 +5,17 @@ namespace TagsCloudApp.Configs;
 
 public interface IDrawingAlgorithmsConfig
 {
-    private static readonly Dictionary<WordSizingMethod, Type> _sizingMethodTypes = new()
+    private static readonly Dictionary<WordSizingMethod, Type> sizingMethodTypes = new()
     {
         { WordSizingMethod.Frequency, typeof(WordSizesByFrequencyGetter) },
     };
 
-    private static readonly Dictionary<RectanglesLayouter, Type> _rectanglesLayoutersTypes = new()
+    private static readonly Dictionary<RectanglesLayouter, Type> rectanglesLayoutersTypes = new()
     {
         { RectanglesLayouter.Spiral, typeof(SpiralCloudLayouter) },
     };
 
-    private static readonly Dictionary<DrawingSetting, Type> _drawingSettingsSetterTypes = new()
+    private static readonly Dictionary<DrawingSetting, Type> drawingSettingsSetterTypes = new()
     {
     };
 
@@ -29,7 +29,7 @@ public interface IDrawingAlgorithmsConfig
     {
         get
         {
-            if (!_sizingMethodTypes.TryGetValue(WordSizingMethod, out var type))
+            if (!sizingMethodTypes.TryGetValue(WordSizingMethod, out var type))
             {
                 throw new ArgumentException($"Unknown word sizing method type: '{WordSizingMethod}'.");
             }
@@ -42,7 +42,7 @@ public interface IDrawingAlgorithmsConfig
     {
         get
         {
-            if (!_rectanglesLayoutersTypes.TryGetValue(RectanglesLayouter, out var type))
+            if (!rectanglesLayoutersTypes.TryGetValue(RectanglesLayouter, out var type))
             {
                 throw new ArgumentException($"Unknown rectangle layouter type: '{RectanglesLayouter}'.");
             }
@@ -59,7 +59,7 @@ public interface IDrawingAlgorithmsConfig
 
             for (var i = 0; i < DrawingSettings.Length; i++)
             {
-                if (!_drawingSettingsSetterTypes.TryGetValue(DrawingSettings[i], out var type))
+                if (!drawingSettingsSetterTypes.TryGetValue(DrawingSettings[i], out var type))
                 {
                     throw new ArgumentException($"Unknown setting: '{DrawingSettings[i]}'.");
                 }

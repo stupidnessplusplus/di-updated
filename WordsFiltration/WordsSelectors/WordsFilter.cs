@@ -4,20 +4,20 @@ namespace WordsFiltration.WordsSelectors;
 
 public class WordsFilter : IWordsSelector
 {
-    private readonly IWordsSelectionConfig _wordsSelectionConfig;
+    private readonly IWordsSelectionConfig wordsSelectionConfig;
 
     public WordsFilter(IWordsSelectionConfig wordsSelectionConfig)
     {
         ArgumentNullException.ThrowIfNull(wordsSelectionConfig);
 
-        _wordsSelectionConfig = wordsSelectionConfig;
+        this.wordsSelectionConfig = wordsSelectionConfig;
     }
 
     public IEnumerable<string> Select(IEnumerable<string> words)
     {
         ArgumentNullException.ThrowIfNull(words);
 
-        var excludedWords = _wordsSelectionConfig.ExcludedWords?.ToHashSet();
+        var excludedWords = wordsSelectionConfig.ExcludedWords?.ToHashSet();
 
         if (excludedWords == null)
         {

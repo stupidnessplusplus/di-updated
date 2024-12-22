@@ -5,18 +5,18 @@ namespace TagsCloudCreation.WordSizesGetters;
 
 public class WordSizesByFrequencyGetter : IWordSizesGetter
 {
-    private readonly Image _emptyImage = new Bitmap(1, 1);
+    private readonly Image emptyImage = new Bitmap(1, 1);
 
-    private readonly IWordSizesGetterConfig _wordSizesGetterConfig;
-    private readonly ITagsFontConfig _tagsFontConfig;
+    private readonly IWordSizesGetterConfig wordSizesGetterConfig;
+    private readonly ITagsFontConfig tagsFontConfig;
 
     public WordSizesByFrequencyGetter(IWordSizesGetterConfig wordSizesGetterConfig, ITagsFontConfig tagsFontConfig)
     {
         ArgumentNullException.ThrowIfNull(wordSizesGetterConfig);
         ArgumentNullException.ThrowIfNull(tagsFontConfig);
 
-        _wordSizesGetterConfig = wordSizesGetterConfig;
-        _tagsFontConfig = tagsFontConfig;
+        this.wordSizesGetterConfig = wordSizesGetterConfig;
+        this.tagsFontConfig = tagsFontConfig;
     }
 
     public UnplacedTag[] GetSizes(IList<string> words)
@@ -34,9 +34,9 @@ public class WordSizesByFrequencyGetter : IWordSizesGetter
 
     private UnplacedTag GetSize(string word, int wordFrequency)
     {
-        var height = _wordSizesGetterConfig.MinSize + wordFrequency - 1;
-        using var wordFont = new Font(_tagsFontConfig.FontName, height, _tagsFontConfig.FontStyle, GraphicsUnit.Pixel);
-        using var graphics = Graphics.FromImage(_emptyImage);
+        var height = wordSizesGetterConfig.MinSize + wordFrequency - 1;
+        using var wordFont = new Font(tagsFontConfig.FontName, height, tagsFontConfig.FontStyle, GraphicsUnit.Pixel);
+        using var graphics = Graphics.FromImage(emptyImage);
 
         var sizeF = graphics.MeasureString(word, wordFont);
         var size = new Size((int)Math.Ceiling(sizeF.Width), height);

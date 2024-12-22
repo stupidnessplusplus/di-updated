@@ -9,17 +9,17 @@ namespace TagsCloudCreation_Tests.TagsDrawingDecorators;
 [TestFixture]
 internal class SingleSolidColorTagsDecoratorTests : TagsDrawingDecoratorTests
 {
-    private static readonly Color _configMainColor = Color.FromArgb(0, 0, 0);
+    private static readonly Color configMainColor = Color.FromArgb(0, 0, 0);
 
-    private ITagsColorConfig _tagsColorConfig;
+    private ITagsColorConfig tagsColorConfig;
 
     [SetUp]
     public void SetUp()
     {
-        _tagsColorConfig = A.Fake<ITagsColorConfig>();
-        A.CallTo(() => _tagsColorConfig.MainColor).Returns(_configMainColor);
+        tagsColorConfig = A.Fake<ITagsColorConfig>();
+        A.CallTo(() => tagsColorConfig.MainColor).Returns(configMainColor);
 
-        _tagsDecorator = new SingleSolidColorTagsDecorator(_tagsColorConfig);
+        tagsDecorator = new SingleSolidColorTagsDecorator(tagsColorConfig);
     }
 
     [Test]
@@ -32,11 +32,11 @@ internal class SingleSolidColorTagsDecoratorTests : TagsDrawingDecoratorTests
     [Test]
     public void Decorate_SetsTagsBrush()
     {
-        var brush = new SolidBrush(_configMainColor);
-        var expectedTags = _tags
+        var brush = new SolidBrush(configMainColor);
+        var expectedTags = tags
             .Select(tag => tag with { Brush = brush });
 
-        var decoratedTags = _tagsDecorator.Decorate(_tags);
+        var decoratedTags = tagsDecorator.Decorate(tags);
 
         decoratedTags.Should().BeEquivalentTo(expectedTags);
     }
