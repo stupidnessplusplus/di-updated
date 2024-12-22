@@ -11,11 +11,15 @@ public class TextSplitter
 
     public TextSplitter(IEnumerable<IWordsSelector> wordsSelectors)
     {
+        ArgumentNullException.ThrowIfNull(wordsSelectors);
+
         _wordsSelectors = wordsSelectors;
     }
 
     public string[] SplitToWords(string text)
     {
+        ArgumentNullException.ThrowIfNull(text);
+
         text = text.ToLower();
 
         var words = _wordSplitRegex
