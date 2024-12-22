@@ -7,7 +7,7 @@ public static class Program
 {
     public static void Main(params string[] args)
     {
-        var a = Parser.Default
+        Parser.Default
             .ParseArguments<ProgramConfig>(args)
             .WithParsed(Run);
     }
@@ -16,7 +16,7 @@ public static class Program
     {
         try
         {
-            new App().Run(config, config, config, config, config);
+            new App().Run(config, config, config, config, config, config);
             Console.WriteLine($"Image saved to '{config.OutputPath}'.");
         }
         catch (Exception ex)

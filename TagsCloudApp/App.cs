@@ -7,6 +7,8 @@ using TagsCloudCreation.TagsDrawers;
 using TagsCloudCreation.TagsDrawingDecorators;
 using TagsCloudCreation.WordSizesGetters;
 using WordsFiltration;
+using WordsFiltration.Configs;
+using WordsFiltration.WordsSelectors;
 
 namespace TagsCloudApp;
 
@@ -15,20 +17,26 @@ public class App
     public void Run(
         IIOConfig ioConfig,
         IDrawingAlgorithmsConfig algorithmsConfig,
+        IWordsSelectionConfig wordsSelectionConfig,
         IWordSizesGetterConfig wordSizesGetterConfig,
         ITagsColorConfig colorConfig,
         ITagsFontConfig fontConfig)
     {
         var builder = new ContainerBuilder();
 
+        builder.RegisterInstance(wordsSelectionConfig).As<IWordsSelectionConfig>().SingleInstance();
         builder.RegisterInstance(wordSizesGetterConfig).As<IWordSizesGetterConfig>().SingleInstance();
         builder.RegisterInstance(colorConfig).As<ITagsColorConfig>().SingleInstance();
         builder.RegisterInstance(fontConfig).As<ITagsFontConfig>().SingleInstance();
 
+        builder.RegisterType<WordsStemmer>().As<IWordsSelector>().SingleInstance();
+        builder.RegisterType<PartsOfSpeechFilter>().As<IWordsSelector>().SingleInstance();
+        builder.RegisterType<WordsFilter>().As<IWordsSelector>().SingleInstance();
+        builder.RegisterType<TextSplitter>().AsSelf().SingleInstance();
+
+        RegisterDrawingAlgorithms(builder, algorithmsConfig);
         builder.RegisterType<TagsDrawer>().As<ITagsDrawer>().SingleInstance();
         builder.RegisterType<TagsCloudCreator>().AsSelf().SingleInstance();
-        builder.RegisterType<TextSplitter>().AsSelf().SingleInstance();
-        RegisterDrawingAlgorithms(builder, algorithmsConfig);
 
         var container = builder.Build();
         var tagsCloudCreator = container.Resolve<TagsCloudCreator>();
