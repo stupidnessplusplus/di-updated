@@ -2,5 +2,5 @@
 
 public enum WordSizingMethod
 {
-    Frequency,
+    Frequency = 0,
 }

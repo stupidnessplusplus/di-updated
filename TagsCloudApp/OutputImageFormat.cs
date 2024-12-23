@@ -2,9 +2,9 @@
 
 public enum OutputImageFormat
 {
-    Png,
+    Png = 0,
 
-    Jpeg,
+    Jpeg = 1,
 
-    Bmp,
+    Bmp = 2,
 }

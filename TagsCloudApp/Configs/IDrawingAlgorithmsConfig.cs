@@ -13,6 +13,7 @@ public interface IDrawingAlgorithmsConfig
     private static readonly Dictionary<RectanglesLayouter, Type> rectanglesLayoutersTypes = new()
     {
         { RectanglesLayouter.Spiral, typeof(SpiralCloudLayouter) },
+        { RectanglesLayouter.SpiralCircle, typeof(SpiralCircularCloudLayouter) },
     };
 
     private static readonly Dictionary<DrawingSetting, Type> drawingSettingsSetterTypes = new()

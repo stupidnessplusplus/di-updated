@@ -28,7 +28,7 @@ internal class ProgramConfig
     [Option('s', "sizing", Required = false, Default = WordSizingMethod.Frequency)]
     public WordSizingMethod WordSizingMethod { get; private set; }
 
-    [Option('l', "layouter", Required = false, Default = RectanglesLayouter.Spiral)]
+    [Option('l', "layouter", Required = false, Default = RectanglesLayouter.SpiralCircle)]
     public RectanglesLayouter RectanglesLayouter { get; private set; }
 
     [Option('d', "drawing-settings", Required = false, Default = new DrawingSetting[0])]
