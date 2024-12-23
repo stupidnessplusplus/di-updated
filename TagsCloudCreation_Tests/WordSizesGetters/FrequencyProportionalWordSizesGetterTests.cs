@@ -7,40 +7,42 @@ using TagsCloudCreation.WordSizesGetters;
 namespace TagsCloudCreation_Tests.WordSizesGetters;
 
 [TestFixture]
-internal class WordSizesByFrequencyGetterTests
+internal class FrequencyProportionalWordSizesGetterTests
 {
     private const int ConfigMinSize = 8;
+    private const double ConfigScale = 1;
     private const string ConfigFontName = "Arial";
     private const FontStyle ConfigFontStyle = FontStyle.Regular;
 
     private ITagsFontConfig tagsFontConfig;
     private IWordSizesGetterConfig wordSizesGetterConfig;
-    private WordSizesByFrequencyGetter wordSizesGetter;
+    private FrequencyProportionalWordSizesGetter wordSizesGetter;
 
     [SetUp]
     public void SetUp()
     {
         wordSizesGetterConfig = A.Fake<IWordSizesGetterConfig>();
         A.CallTo(() => wordSizesGetterConfig.MinSize).Returns(ConfigMinSize);
+        A.CallTo(() => wordSizesGetterConfig.Scale).Returns(ConfigScale);
 
         tagsFontConfig = A.Fake<ITagsFontConfig>();
         A.CallTo(() => tagsFontConfig.FontName).Returns(ConfigFontName);
         A.CallTo(() => tagsFontConfig.FontStyle).Returns(ConfigFontStyle);
 
-        wordSizesGetter = new WordSizesByFrequencyGetter(wordSizesGetterConfig, tagsFontConfig);
+        wordSizesGetter = new FrequencyProportionalWordSizesGetter(wordSizesGetterConfig, tagsFontConfig);
     }
 
     [Test]
     public void Constructor_ThrowsException_WhenWordSizesGetterConfigIsNull()
     {
-        var ctor = () => new WordSizesByFrequencyGetter(null!, tagsFontConfig);
+        var ctor = () => new FrequencyProportionalWordSizesGetter(null!, tagsFontConfig);
         ctor.Should().Throw<ArgumentNullException>();
     }
 
     [Test]
     public void Constructor_ThrowsException_WhenTagsFontConfigIsNull()
     {
-        var ctor = () => new WordSizesByFrequencyGetter(wordSizesGetterConfig, null!);
+        var ctor = () => new FrequencyProportionalWordSizesGetter(wordSizesGetterConfig, null!);
         ctor.Should().Throw<ArgumentNullException>();
     }
 

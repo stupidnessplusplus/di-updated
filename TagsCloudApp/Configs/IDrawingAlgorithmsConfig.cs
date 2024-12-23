@@ -7,7 +7,8 @@ public interface IDrawingAlgorithmsConfig
 {
     private static readonly Dictionary<WordSizingMethod, Type> sizingMethodTypes = new()
     {
-        { WordSizingMethod.Frequency, typeof(WordSizesByFrequencyGetter) },
+        { WordSizingMethod.Frequency, typeof(FrequencyProportionalWordSizesGetter) },
+        { WordSizingMethod.SmoothFrequency, typeof(SmoothFrequencyProportionalWordSizesGetter) },
     };
 
     private static readonly Dictionary<RectanglesLayouter, Type> rectanglesLayoutersTypes = new()

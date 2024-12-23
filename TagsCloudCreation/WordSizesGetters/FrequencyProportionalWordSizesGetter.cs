@@ -3,14 +3,14 @@ using TagsCloudCreation.Configs;
 
 namespace TagsCloudCreation.WordSizesGetters;
 
-public class WordSizesByFrequencyGetter : IWordSizesGetter
+public class FrequencyProportionalWordSizesGetter : IWordSizesGetter
 {
     private readonly Image emptyImage = new Bitmap(1, 1);
 
     private readonly IWordSizesGetterConfig wordSizesGetterConfig;
     private readonly ITagsFontConfig tagsFontConfig;
 
-    public WordSizesByFrequencyGetter(IWordSizesGetterConfig wordSizesGetterConfig, ITagsFontConfig tagsFontConfig)
+    public FrequencyProportionalWordSizesGetter(IWordSizesGetterConfig wordSizesGetterConfig, ITagsFontConfig tagsFontConfig)
     {
         ArgumentNullException.ThrowIfNull(wordSizesGetterConfig);
         ArgumentNullException.ThrowIfNull(tagsFontConfig);
@@ -19,12 +19,11 @@ public class WordSizesByFrequencyGetter : IWordSizesGetter
         this.tagsFontConfig = tagsFontConfig;
     }
 
-    public UnplacedTag[] GetSizes(IList<string> words)
+    public virtual UnplacedTag[] GetSizes(IList<string> words)
     {
         ArgumentNullException.ThrowIfNull(words);
 
         return words
-            .Where(word => !string.IsNullOrWhiteSpace(word))
             .GroupBy(word => word)
             .Select(group => (Word: group.Key, Frequency: group.Count()))
             .OrderByDescending(x => x.Frequency)
@@ -32,9 +31,9 @@ public class WordSizesByFrequencyGetter : IWordSizesGetter
             .ToArray();
     }
 
-    private UnplacedTag GetSize(string word, int wordFrequency)
+    protected UnplacedTag GetSize(string word, int wordFrequency)
     {
-        var height = wordSizesGetterConfig.MinSize + wordFrequency - 1;
+        var height = (int)(wordSizesGetterConfig.MinSize + wordSizesGetterConfig.Scale * (wordFrequency - 1));
         using var wordFont = new Font(tagsFontConfig.FontName, height, tagsFontConfig.FontStyle, GraphicsUnit.Pixel);
         using var graphics = Graphics.FromImage(emptyImage);
 

@@ -45,6 +45,9 @@ internal class ProgramConfig
     [Option("min-word-size", Required = false, Default = 10)]
     public int MinSize { get; private set; }
 
+    [Option("word-size-scale", Required = false, Default = 1)]
+    public double Scale { get; private set; }
+
     [Option("background", Required = false, Default = "#000000")]
     public string BackgroundColorHex
     {
