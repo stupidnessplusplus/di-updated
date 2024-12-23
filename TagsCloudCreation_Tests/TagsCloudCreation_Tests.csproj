@@ -26,12 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="RectanglesCloudPositioning">
-      <HintPath>..\Dependencies\RectanglesCloudPositioning.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
     <Using Include="NUnit.Framework" />
   </ItemGroup>
 

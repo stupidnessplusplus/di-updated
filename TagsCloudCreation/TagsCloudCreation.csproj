@@ -11,9 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="RectanglesCloudPositioning">
-      <HintPath>..\Dependencies\RectanglesCloudPositioning.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\RectanglesCloudPositioning\RectanglesCloudPositioning.csproj" />
   </ItemGroup>
 
 </Project>

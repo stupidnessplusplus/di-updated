@@ -60,7 +60,7 @@ public class App
         ContainerBuilder builder,
         IDrawingAlgorithmsConfig config)
     {
-        builder.RegisterType(config.RectanglesLayouterType).As<ICircularCloudLayouter>().SingleInstance();
+        builder.RegisterType(config.RectanglesLayouterType).As<ICloudLayouter>().SingleInstance();
         builder.RegisterType(config.WordSizesGetterType).As<IWordSizesGetter>().SingleInstance();
 
         builder.RegisterType<SingleSolidColorTagsDecorator>().As<ITagsDrawingDecorator>().SingleInstance();

@@ -15,10 +15,4 @@
     <ProjectReference Include="..\WordsFiltration\WordsFiltration.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="RectanglesCloudPositioning">
-      <HintPath>..\Dependencies\RectanglesCloudPositioning.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>

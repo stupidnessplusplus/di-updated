@@ -9,13 +9,13 @@ namespace TagsCloudCreation;
 public class TagsCloudCreator
 {
     private readonly IWordSizesGetter wordSizesGetter;
-    private readonly ICircularCloudLayouter cloudLayouter;
+    private readonly ICloudLayouter cloudLayouter;
     private readonly IEnumerable<ITagsDrawingDecorator> tagsSettingsSetters;
     private readonly ITagsDrawer tagsDrawer;
 
     public TagsCloudCreator(
         IWordSizesGetter wordSizesGetter,
-        ICircularCloudLayouter cloudLayouter,
+        ICloudLayouter cloudLayouter,
         IEnumerable<ITagsDrawingDecorator> tagsSettingsSetters,
         ITagsDrawer tagsDrawer)
     {
