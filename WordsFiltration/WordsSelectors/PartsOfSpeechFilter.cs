@@ -30,7 +30,14 @@ public class PartsOfSpeechFilter : IWordsSelector
 
     private PartOfSpeech GetPartOfSpeech(string word)
     {
-        return new Analyses(word)[0].StemGram
+        var grammarList = new Analyses(word)[0].StemGram;
+
+        if (grammarList.Contains(Grammar.Abbreviation))
+        {
+            return PartOfSpeech.Unknown;
+        }
+
+        return grammarList
             .Select(ToPartOfSpeech)
             .Where(pos => pos != PartOfSpeech.Unknown)
             .SingleOrDefault(PartOfSpeech.Unknown);
