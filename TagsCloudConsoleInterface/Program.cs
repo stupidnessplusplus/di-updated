@@ -16,7 +16,7 @@ public static class Program
     {
         try
         {
-            new App().Run(config, config, config, config, config, config);
+            new App().Run(config, config, config, config, config, config, config);
             Console.WriteLine($"Image saved to '{config.OutputPath}'.");
         }
         catch (Exception ex)

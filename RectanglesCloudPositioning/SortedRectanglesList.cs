@@ -27,10 +27,10 @@ internal class SortedRectanglesList
 
     public void Add(Rectangle rectangle)
     {
-        sortedRectangles[Direction.Left].Add(-rectangle.Left, rectangle);
-        sortedRectangles[Direction.Right].Add(rectangle.Right, rectangle);
-        sortedRectangles[Direction.Up].Add(-rectangle.Top, rectangle);
-        sortedRectangles[Direction.Down].Add(rectangle.Bottom, rectangle);
+        sortedRectangles[Direction.Left].Add(-rectangle.Right, rectangle);
+        sortedRectangles[Direction.Right].Add(rectangle.Left, rectangle);
+        sortedRectangles[Direction.Up].Add(-rectangle.Bottom, rectangle);
+        sortedRectangles[Direction.Down].Add(rectangle.Top, rectangle);
 
         Count++;
     }

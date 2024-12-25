@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using RectanglesCloudPositioning;
+using RectanglesCloudPositioning.Configs;
 using TagsCloudApp.Configs;
 using TagsCloudCreation;
 using TagsCloudCreation.Configs;
@@ -19,6 +20,7 @@ public class App
         IDrawingAlgorithmsConfig algorithmsConfig,
         IWordsSelectionConfig wordsSelectionConfig,
         IWordSizesGetterConfig wordSizesGetterConfig,
+        IRectanglesPositioningConfig rectanglesPositioningConfig,
         ITagsColorConfig colorConfig,
         ITagsFontConfig fontConfig)
     {
@@ -26,6 +28,7 @@ public class App
 
         builder.RegisterInstance(wordsSelectionConfig).As<IWordsSelectionConfig>().SingleInstance();
         builder.RegisterInstance(wordSizesGetterConfig).As<IWordSizesGetterConfig>().SingleInstance();
+        builder.RegisterInstance(rectanglesPositioningConfig).As<IRectanglesPositioningConfig>().SingleInstance();
         builder.RegisterInstance(colorConfig).As<ITagsColorConfig>().SingleInstance();
         builder.RegisterInstance(fontConfig).As<ITagsFontConfig>().SingleInstance();
 

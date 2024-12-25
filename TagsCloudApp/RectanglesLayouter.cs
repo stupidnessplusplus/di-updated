@@ -2,7 +2,7 @@
 
 public enum RectanglesLayouter
 {
-    Spiral = 0,
+    Circle = 0,
 
-    SpiralCircle = 1,
+    Shaped = 1,
 }

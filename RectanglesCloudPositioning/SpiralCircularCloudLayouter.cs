@@ -1,22 +1,31 @@
+using RectanglesCloudPositioning.Configs;
 using System.Drawing;
 
 namespace RectanglesCloudPositioning;
 
-public class SpiralCircularCloudLayouter
-    : ICloudLayouter
+public class SpiralCircularCloudLayouter : ICloudLayouter
 {
-    private readonly List<Rectangle> _rectangles = [];
-    private readonly Point _center;
+    private readonly SortedRectanglesList rectangles = new();
+    private readonly Dictionary<Direction, int> directionIndices = [];
 
-    private int _radius;
+    private readonly Point center;
+    private readonly int raysCount;
 
-    public SpiralCircularCloudLayouter() : this(Point.Empty)
+    private IEnumerator<(Point Point, Direction Direction)> pointsEnumerator;
+    private int radius;
+
+    public SpiralCircularCloudLayouter(IRectanglesPositioningConfig config)
+        : this(config.Center, config.RaysCount)
     {
     }
 
-    public SpiralCircularCloudLayouter(Point center)
+    public SpiralCircularCloudLayouter(Point center, int raysCount)
     {
-        _center = center;
+        this.center = center;
+        this.raysCount = raysCount;
+        pointsEnumerator = Enumerable
+            .Empty<(Point, Direction)>()
+            .GetEnumerator();
     }
 
     public Rectangle PutNextRectangle(Size rectangleSize)
@@ -24,73 +33,75 @@ public class SpiralCircularCloudLayouter
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(rectangleSize.Width);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(rectangleSize.Height);
 
-        var rectangle = GetPositionOnCircleToPutRectangle(rectangleSize);
-        _rectangles.Add(rectangle);
+        var rectangle = GetRectangleToPut(rectangleSize);
+        rectangles.Add(rectangle);
         return rectangle;
     }
 
-    private Rectangle GetPositionOnCircleToPutRectangle(Size rectangleSize)
+    private Rectangle GetRectangleToPut(Size rectangleSize)
     {
-        if (TryGetPositionOnCircleToPutRectangle(rectangleSize, out var putPosition))
+        while (pointsEnumerator.MoveNext())
         {
-            return new Rectangle(putPosition, rectangleSize);
-        }
-
-        var previousSize = _rectangles[^1].Size;
-        _radius += Math.Min(previousSize.Width + rectangleSize.Width, previousSize.Height + rectangleSize.Height) / 4;
-        return GetPositionOnCircleToPutRectangle(rectangleSize);
-    }
-
-    private bool TryGetPositionOnCircleToPutRectangle(Size rectangleSize, out Point putPosition)
-    {
-        foreach (var point in GetCirclePoints(_radius, Point.Empty - rectangleSize / 2))
-        {
+            var direction = pointsEnumerator.Current.Direction;
+            var point = pointsEnumerator.Current.Point - rectangleSize / 2;
             var rectangle = new Rectangle(point, rectangleSize);
 
-            if (CanPut(rectangle))
+            if (CanPut(rectangle, direction))
             {
-                putPosition = point;
-                return true;
+                ResetDirectionIndices();
+                return rectangle;
             }
         }
 
-        putPosition = default;
-        return false;
+        radius++;
+        ResetDirectionIndices();
+        pointsEnumerator = GetPoints().GetEnumerator();
+        return GetRectangleToPut(rectangleSize);
     }
 
-    private bool CanPut(Rectangle rectangle)
+    private bool CanPut(Rectangle rectangle, Direction direction)
     {
-        return _rectangles
-            .All(otherRectangle => !otherRectangle.IntersectsWith(rectangle));
+        var wideRectangle = direction is Direction.Left or Direction.Right
+            ? new Rectangle(new Point(rectangle.X, int.MinValue / 2), new Size(rectangle.Width, int.MaxValue))
+            : new Rectangle(new Point(int.MinValue / 2, rectangle.Y), new Size(int.MaxValue, rectangle.Height));
+        
+        if (rectangles.HasIntersection(wideRectangle, direction, directionIndices[direction], out var intersectionIndex))
+        {
+            directionIndices[direction] = intersectionIndex;
+
+            return !rectangles.HasIntersection(rectangle, direction, intersectionIndex, out _);
+        }
+        
+        return true;
     }
 
-    private IEnumerable<Point> GetCirclePoints(int radius, Point center)
+    private IEnumerable<(Point, Direction)> GetPoints()
     {
         if (radius == 0)
         {
-            yield return center;
+            yield return (center, Direction.None);
             yield break;
         }
 
-        var centerSize = (Size)center;
-        var maxC = Math.Sqrt(2) / 2 * radius;
-        var step = 1;
+        var step = 2 * Math.PI / raysCount;
 
-        for (var c = -maxC; c <= maxC; c += step)
+        for (var angle = Math.PI / 4; angle < 3 * Math.PI / 4; angle += step)
         {
-            var x = (int)c;
-            var y = GetOtherCoordinateOnCircle(x, radius);
+            var x = (int)(radius * Math.Cos(angle));
+            var y = (int)(radius * Math.Sin(angle));
 
-            yield return new Point(x, -y) + centerSize;
-            yield return new Point(-y, -x) + centerSize;
-            yield return new Point(-x, y) + centerSize;
-            yield return new Point(y, x) + centerSize;
+            yield return (new Point(x, y), Direction.Left);
+            yield return (new Point(-y, x), Direction.Up);
+            yield return (new Point(-x, -y), Direction.Right);
+            yield return (new Point(y, -x), Direction.Down);
         }
     }
 
-    private int GetOtherCoordinateOnCircle(int x, int radius)
+    private void ResetDirectionIndices()
     {
-        // x ^ 2 + y ^ 2 = r ^ 2
-        return (int)Math.Sqrt(radius * radius - x * x);
+        directionIndices[Direction.Left] = 0;
+        directionIndices[Direction.Right] = 0;
+        directionIndices[Direction.Up] = 0;
+        directionIndices[Direction.Down] = 0;
     }
 }
