@@ -19,7 +19,16 @@ public class TagsDrawer : ITagsDrawer
         ArgumentNullException.ThrowIfNull(tagsWithSettings);
 
         var imageSize = GetImageSizeToFitTags(tagsWithSettings);
-        var image = new Bitmap(imageSize.Width, imageSize.Height);
+        Bitmap image;
+
+        try
+        {
+            image = new Bitmap(imageSize.Width, imageSize.Height);
+        }
+        catch (Exception ex)
+        {
+            throw new ArgumentException($"Unable to create image of size {imageSize}.", ex);
+        }
 
         FillBackground(image, colorConfig.BackgroundColor);
         DrawTags(image, tagsWithSettings);

@@ -1,6 +1,7 @@
 ﻿using CommandLine;
 using RectanglesCloudPositioning.Configs;
 using System.Drawing;
+using System.Drawing.Text;
 using TagsCloudApp;
 using TagsCloudApp.Configs;
 using TagsCloudCreation.Configs;
@@ -18,11 +19,37 @@ internal class ProgramConfig
       ITagsColorConfig,
       ITagsFontConfig
 {
+    private string inputPath = null!;
+    private string outputPath = null!;
+    private string excludedWordsPath = null!;
+    private string radiusEquationString = null!;
+    private int minWordSize;
+    private double scale;
+    private int raysCount;
+    private string fontName = null!;
+    private FontStyle fontStyle;
+
     [Option('i', "in", Required = true)]
-    public string InputPath { get; private set; } = null!;
+    public string InputPath
+    {
+        get => inputPath;
+        set
+        {
+            if (!File.Exists(value))
+            {
+                throw new FileNotFoundException($"Input file not found: '{value}'.");
+            }
+
+            inputPath = value;
+        }
+    }
 
     [Option('o', "out", Required = true)]
-    public string OutputPath { get; private set; } = null!;
+    public string OutputPath
+    {
+        get => outputPath;
+        set => outputPath = value;
+    }
 
     [Option("image-format", Required = false, Default = OutputImageFormat.Png)]
     public OutputImageFormat OutputImageFormat { get; private set; }
@@ -36,7 +63,8 @@ internal class ProgramConfig
     [Option('d', "drawing-settings", Required = false, Default = new DrawingSetting[0])]
     public IEnumerable<DrawingSetting> DrawingSettingsEnumerable
     {
-        set
+        get => DrawingSettings;
+        private set
         {
             DrawingSettings = value.ToArray();
         }
@@ -47,13 +75,21 @@ internal class ProgramConfig
     [Option("exclude-words", Required = false, Default = null)]
     public string? ExcludedWordsPath
     {
-        set
+        get => excludedWordsPath;
+        private set
         {
             if (value == null)
             {
+                ExcludedWords = null;
                 return;
             }
 
+            if (!File.Exists(value))
+            {
+                throw new FileNotFoundException($"Excluded words file not found: '{value}'.");
+            }
+
+            excludedWordsPath = value;
             ExcludedWords = File.ReadAllLines(value);
         }
     }
@@ -63,7 +99,8 @@ internal class ProgramConfig
     [Option("pos", Required = false, Default = new PartOfSpeech[] { PartOfSpeech.A, PartOfSpeech.S, PartOfSpeech.V })]
     public IEnumerable<PartOfSpeech> IncludedPartsOfSpeechEnumerable
     {
-        set
+        get => IncludedPartsOfSpeech;
+        private set
         {
             IncludedPartsOfSpeech = value.ToArray();
         }
@@ -72,23 +109,52 @@ internal class ProgramConfig
     public PartOfSpeech[] IncludedPartsOfSpeech { get; private set; } = null!;
 
     [Option("min-word-size", Required = false, Default = 10)]
-    public int MinSize { get; private set; }
+    public int MinSize
+    {
+        get => minWordSize;
+        private set
+        {
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
+
+            minWordSize = value;
+        }
+    }
 
     [Option("word-size-scale", Required = false, Default = 1)]
-    public double Scale { get; private set; }
+    public double Scale
+    {
+        get => scale;
+        private set
+        {
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
+
+            scale = value;
+        }
+    }
 
     public Point Center => Point.Empty;
 
     [Option("rays-count", Required = false, Default = 360)]
-    public int RaysCount { get; private set; }
+    public int RaysCount
+    {
+        get => raysCount;
+        private set
+        {
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
+
+            raysCount = value;
+        }
+    }
 
     [Option("radius", Required = false, Default = "1")]
     public string RadiusEquationString
     {
-        set
+        get => radiusEquationString;
+        private set
         {
             try
             {
+                radiusEquationString = value;
                 RadiusEquation = RadiusEquationParser.ParseRadiusEquation(value);
             }
             catch (Exception ex)
@@ -103,38 +169,47 @@ internal class ProgramConfig
     [Option("background", Required = false, Default = "#000000")]
     public string BackgroundColorHex
     {
-        set
-        {
-            BackgroundColor = ColorTranslator.FromHtml(value);
-        }
+        get => ColorTranslator.ToHtml(BackgroundColor);
+        private set => BackgroundColor = ColorTranslator.FromHtml(value);
     }
 
     [Option("main-color", Required = false, Default = "#FFFFFF")]
     public string MainColorHex
     {
-        set
-        {
-            MainColor = ColorTranslator.FromHtml(value);
-        }
+        get => ColorTranslator.ToHtml(MainColor);
+        private set => MainColor = ColorTranslator.FromHtml(value);
     }
-
-    public Color MainColor { get; private set; }
 
     [Option("secondary-color", Required = false, Default = "#FFFFFF")]
     public string SecondaryColorHex
     {
-        set
-        {
-            SecondaryColor = ColorTranslator.FromHtml(value);
-        }
+        get => ColorTranslator.ToHtml(SecondaryColor);
+        private set => SecondaryColor = ColorTranslator.FromHtml(value);
     }
-
-    public Color SecondaryColor { get; private set; }
 
     public Color BackgroundColor { get; private set; }
 
+    public Color MainColor { get; private set; }
+
+    public Color SecondaryColor { get; private set; }
+
     [Option("font", Required = false, Default = "Arial")]
-    public string FontName { get; private set; } = null!;
+    public string FontName
+    {
+        get => fontName;
+        set
+        {
+            using var installedFonts = new InstalledFontCollection();
+
+            if (!installedFonts.Families
+                .Any(fontFamily => fontFamily.Name.Equals(value, StringComparison.InvariantCultureIgnoreCase)))
+            {
+                throw new Exception($"Font '{value}' does not exist.");
+            }
+
+            fontName = value;
+        }
+    }
 
     [Option("font-style", Required = false, Default = FontStyle.Regular)]
     public FontStyle FontStyle { get; private set; }

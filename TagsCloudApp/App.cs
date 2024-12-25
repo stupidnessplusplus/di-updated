@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using RectanglesCloudPositioning;
 using RectanglesCloudPositioning.Configs;
+using System.Runtime.InteropServices;
 using TagsCloudApp.Configs;
 using TagsCloudCreation;
 using TagsCloudCreation.Configs;
@@ -53,10 +54,26 @@ public class App
         TextSplitter textSplitter,
         TagsCloudCreator tagsCloudCreator)
     {
+        var outputDirectoryName = Path.GetDirectoryName(ioConfig.OutputPath);
+
+        if (!string.IsNullOrEmpty(outputDirectoryName)
+            && !Directory.Exists(outputDirectoryName))
+        {
+            Directory.CreateDirectory(outputDirectoryName!);
+        }
+
         var text = File.ReadAllText(ioConfig.InputPath);
         var words = textSplitter.SplitToWords(text);
         var image = tagsCloudCreator.DrawTagsCloud(words);
-        image.Save(ioConfig.OutputPath, ioConfig.ImageFormat);
+
+        try
+        {
+            image.Save(ioConfig.OutputPath, ioConfig.ImageFormat);
+        }
+        catch (ExternalException ex)
+        {
+            throw new Exception($"Unable to save image to '{ioConfig.OutputPath}'.", ex);
+        }
     }
 
     private void RegisterDrawingAlgorithms(

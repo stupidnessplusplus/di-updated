@@ -17,7 +17,9 @@ public class WordsFilter : IWordsSelector
     {
         ArgumentNullException.ThrowIfNull(words);
 
-        var excludedWords = wordsSelectionConfig.ExcludedWords?.ToHashSet();
+        var excludedWords = wordsSelectionConfig.ExcludedWords?
+            .Select(word => word.ToLower())
+            .ToHashSet();
 
         if (excludedWords == null)
         {
