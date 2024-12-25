@@ -54,6 +54,10 @@ public class App
         TextSplitter textSplitter,
         TagsCloudCreator tagsCloudCreator)
     {
+        var text = File.ReadAllText(ioConfig.InputPath);
+        var words = textSplitter.SplitToWords(text);
+        var image = tagsCloudCreator.DrawTagsCloud(words);
+
         var outputDirectoryName = Path.GetDirectoryName(ioConfig.OutputPath);
 
         if (!string.IsNullOrEmpty(outputDirectoryName)
@@ -61,10 +65,6 @@ public class App
         {
             Directory.CreateDirectory(outputDirectoryName!);
         }
-
-        var text = File.ReadAllText(ioConfig.InputPath);
-        var words = textSplitter.SplitToWords(text);
-        var image = tagsCloudCreator.DrawTagsCloud(words);
 
         try
         {

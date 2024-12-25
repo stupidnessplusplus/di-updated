@@ -8,13 +8,13 @@ public interface IIOConfig
 
     public string OutputPath { get; }
 
-    public OutputImageFormat OutputImageFormat { get; }
+    public OutputImageFormat OutputFormat { get; }
 
     internal ImageFormat ImageFormat
     {
         get
         {
-            return OutputImageFormat switch
+            return OutputFormat switch
             {
                 OutputImageFormat.Png => ImageFormat.Png,
                 OutputImageFormat.Jpeg => ImageFormat.Jpeg,

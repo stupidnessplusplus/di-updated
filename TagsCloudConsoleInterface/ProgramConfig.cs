@@ -27,9 +27,9 @@ internal class ProgramConfig
     private double scale;
     private int raysCount;
     private string fontName = null!;
-    private FontStyle fontStyle;
 
-    [Option('i', "in", Required = true)]
+    [Option('i', "in", Required = true,
+        HelpText = "Sets the path to the input file.")]
     public string InputPath
     {
         get => inputPath;
@@ -44,23 +44,28 @@ internal class ProgramConfig
         }
     }
 
-    [Option('o', "out", Required = true)]
+    [Option('o', "out", Required = true,
+        HelpText = "Sets the path to the output file.")]
     public string OutputPath
     {
         get => outputPath;
         set => outputPath = value;
     }
 
-    [Option("image-format", Required = false, Default = OutputImageFormat.Png)]
-    public OutputImageFormat OutputImageFormat { get; private set; }
+    [Option("image-format", Required = false, Default = OutputImageFormat.Png,
+        HelpText = "Specifies the output file format.")]
+    public OutputImageFormat OutputFormat { get; private set; }
 
-    [Option('s', "sizing", Required = false, Default = WordSizingMethod.Frequency)]
+    [Option('s', "sizing", Required = false, Default = WordSizingMethod.SmoothFrequency,
+        HelpText = "Specifies the word sizing method.")]
     public WordSizingMethod WordSizingMethod { get; private set; }
 
-    [Option('l', "layouter", Required = false, Default = RectanglesLayouter.Circle)]
+    [Option('l', "layouter", Required = false, Default = RectanglesLayouter.Circle,
+        HelpText = "Specifies the tags layout type.")]
     public RectanglesLayouter RectanglesLayouter { get; private set; }
 
-    [Option('d', "drawing-settings", Required = false, Default = new DrawingSetting[0])]
+    [Option('d', "drawing-settings", Required = false, Default = new DrawingSetting[0],
+        HelpText = $"Specifies additional tags processing methods. Valid values: {nameof(DrawingSetting.Gradient)}")]
     public IEnumerable<DrawingSetting> DrawingSettingsEnumerable
     {
         get => DrawingSettings;
@@ -72,7 +77,8 @@ internal class ProgramConfig
 
     public DrawingSetting[] DrawingSettings { get; private set; } = null!;
 
-    [Option("exclude-words", Required = false, Default = null)]
+    [Option("exclude-words", Required = false, Default = null,
+        HelpText = "Sets the path to the file with excluded words.")]
     public string? ExcludedWordsPath
     {
         get => excludedWordsPath;
@@ -90,13 +96,15 @@ internal class ProgramConfig
             }
 
             excludedWordsPath = value;
-            ExcludedWords = File.ReadAllLines(value);
+            ExcludedWords = File.ReadAllText(value).Split();
         }
     }
 
     public string[]? ExcludedWords { get; private set; }
 
-    [Option("pos", Required = false, Default = new PartOfSpeech[] { PartOfSpeech.A, PartOfSpeech.S, PartOfSpeech.V })]
+    [Option("pos", Required = false, Default = new PartOfSpeech[] { PartOfSpeech.A, PartOfSpeech.S, PartOfSpeech.V },
+        HelpText = "Specifies included parts of speech. "
+            + "Valid values: Unknown, A, ADV, ADVPRO, ANUM, APRO, COM, CONJ, INTJ, NUM, PART, PR, S, SPRO, V")]
     public IEnumerable<PartOfSpeech> IncludedPartsOfSpeechEnumerable
     {
         get => IncludedPartsOfSpeech;
@@ -108,7 +116,8 @@ internal class ProgramConfig
 
     public PartOfSpeech[] IncludedPartsOfSpeech { get; private set; } = null!;
 
-    [Option("min-word-size", Required = false, Default = 10)]
+    [Option("min-word-size", Required = false, Default = 10,
+        HelpText = "Sets the min word size.")]
     public int MinSize
     {
         get => minWordSize;
@@ -120,7 +129,8 @@ internal class ProgramConfig
         }
     }
 
-    [Option("word-size-scale", Required = false, Default = 1)]
+    [Option("word-size-scale", Required = false, Default = 1,
+        HelpText = "Sets the word size scale. Difference between the word sizes will be multiplied by this value.")]
     public double Scale
     {
         get => scale;
@@ -134,7 +144,8 @@ internal class ProgramConfig
 
     public Point Center => Point.Empty;
 
-    [Option("rays-count", Required = false, Default = 360)]
+    [Option("rays-count", Required = false, Default = 360,
+        HelpText = "Sets the number of rays from the center of the tag cloud. Words will be placed along the rays.")]
     public int RaysCount
     {
         get => raysCount;
@@ -146,7 +157,8 @@ internal class ProgramConfig
         }
     }
 
-    [Option("radius", Required = false, Default = "1")]
+    [Option("radius", Required = false, Default = "1",
+        HelpText = "Sets the right side of the radius equation.")]
     public string RadiusEquationString
     {
         get => radiusEquationString;
@@ -166,21 +178,24 @@ internal class ProgramConfig
 
     public Func<double, double> RadiusEquation { get; private set; } = null!;
 
-    [Option("background", Required = false, Default = "#000000")]
+    [Option("background", Required = false, Default = "#FFF",
+        HelpText = "Sets the background color.")]
     public string BackgroundColorHex
     {
         get => ColorTranslator.ToHtml(BackgroundColor);
         private set => BackgroundColor = ColorTranslator.FromHtml(value);
     }
 
-    [Option("main-color", Required = false, Default = "#FFFFFF")]
+    [Option("main-color", Required = false, Default = "#000",
+        HelpText = "Sets the main color of words.")]
     public string MainColorHex
     {
         get => ColorTranslator.ToHtml(MainColor);
         private set => MainColor = ColorTranslator.FromHtml(value);
     }
 
-    [Option("secondary-color", Required = false, Default = "#FFFFFF")]
+    [Option("secondary-color", Required = false, Default = "#000",
+        HelpText = "Sets the secondary color of words.")]
     public string SecondaryColorHex
     {
         get => ColorTranslator.ToHtml(SecondaryColor);
@@ -193,7 +208,8 @@ internal class ProgramConfig
 
     public Color SecondaryColor { get; private set; }
 
-    [Option("font", Required = false, Default = "Arial")]
+    [Option("font", Required = false, Default = "Arial",
+        HelpText = "Sets the font of words.")]
     public string FontName
     {
         get => fontName;
@@ -211,6 +227,7 @@ internal class ProgramConfig
         }
     }
 
-    [Option("font-style", Required = false, Default = FontStyle.Regular)]
+    [Option("font-style", Required = false, Default = FontStyle.Regular,
+        HelpText = "Sets the font style of words.")]
     public FontStyle FontStyle { get; private set; }
 }
