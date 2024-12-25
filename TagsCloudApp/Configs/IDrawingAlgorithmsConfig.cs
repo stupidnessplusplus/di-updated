@@ -1,4 +1,5 @@
 ﻿using RectanglesCloudPositioning;
+using TagsCloudCreation.TagsDrawingDecorators;
 using TagsCloudCreation.WordSizesGetters;
 
 namespace TagsCloudApp.Configs;
@@ -19,6 +20,7 @@ public interface IDrawingAlgorithmsConfig
 
     private static readonly Dictionary<DrawingSetting, Type> drawingSettingsSetterTypes = new()
     {
+        { DrawingSetting.Gradient, typeof(GradientTagsDecorator) },
     };
 
     public WordSizingMethod WordSizingMethod { get; }

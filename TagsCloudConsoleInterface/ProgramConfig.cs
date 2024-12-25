@@ -109,7 +109,7 @@ internal class ProgramConfig
         }
     }
 
-    [Option("foreground", Required = false, Default = "#FFFFFF")]
+    [Option("main-color", Required = false, Default = "#FFFFFF")]
     public string MainColorHex
     {
         set
@@ -119,6 +119,17 @@ internal class ProgramConfig
     }
 
     public Color MainColor { get; private set; }
+
+    [Option("secondary-color", Required = false, Default = "#FFFFFF")]
+    public string SecondaryColorHex
+    {
+        set
+        {
+            SecondaryColor = ColorTranslator.FromHtml(value);
+        }
+    }
+
+    public Color SecondaryColor { get; private set; }
 
     public Color BackgroundColor { get; private set; }
 

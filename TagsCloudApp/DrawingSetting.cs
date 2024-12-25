@@ -2,4 +2,5 @@
 
 public enum DrawingSetting
 {
+    Gradient = 0,
 }
