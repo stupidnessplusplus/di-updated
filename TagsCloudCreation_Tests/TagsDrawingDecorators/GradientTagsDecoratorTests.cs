@@ -45,7 +45,7 @@ internal class GradientTagsDecoratorTests : TagsDrawingDecoratorTests
 
         var decoratedTagsColors = tagsDecorator
             .Decorate(tags)
-            .Select(tag => ((SolidBrush)tag.Brush).Color);
+            .Select(tag => ((SolidBrush)tag.Brush!).Color);
 
         decoratedTagsColors.Should().BeEquivalentTo(expectedColors, options => options.WithStrictOrdering());
     }

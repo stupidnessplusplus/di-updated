@@ -36,17 +36,15 @@ public class TagsDrawer : ITagsDrawer
         return image;
     }
 
-    private Size GetImageSizeToFitTags(IList<TagDrawing> tagsWithSettings)
+    private Size GetImageSizeToFitTags(IList<TagDrawing> tags)
     {
-        if (tagsWithSettings.Count == 0)
+        if (tags.Count == 0)
         {
             return new Size(1, 1);
         }
 
-        var width = 2 * tagsWithSettings
-            .Max(tag => Math.Max(Math.Abs(tag.Tag.Rectangle.Left), tag.Tag.Rectangle.Right));
-        var height = 2 * tagsWithSettings
-            .Max(tag => Math.Max(Math.Abs(tag.Tag.Rectangle.Top), tag.Tag.Rectangle.Bottom));
+        var width = 2 * tags.Max(tag => Math.Max(Math.Abs(tag.Rectangle.Left), tag.Rectangle.Right));
+        var height = 2 * tags.Max(tag => Math.Max(Math.Abs(tag.Rectangle.Top), tag.Rectangle.Bottom));
         return new Size(width, height);
     }
 
@@ -72,21 +70,23 @@ public class TagsDrawer : ITagsDrawer
         var delta = new Size(imageSize.Width / 2, imageSize.Height / 2);
 
         return tags
-            .Select(tagDrawing => tagDrawing with
+            .Select(tag => tag with
             {
-                Tag = tagDrawing.Tag with
+                Rectangle = tag.Rectangle with
                 {
-                    Rectangle = tagDrawing.Tag.Rectangle with
-                    {
-                        Location = tagDrawing.Tag.Rectangle.Location + delta,
-                    },
+                    Location = tag.Rectangle.Location + delta,
                 },
             });
     }
 
     private void Draw(Graphics graphics, TagDrawing tag)
     {
-        using var font = new Font(tag.FontName, tag.Tag.Rectangle.Height, tag.FontStyle, GraphicsUnit.Pixel);
-        graphics.DrawString(tag.Tag.Word, font, tag.Brush, tag.Tag.Rectangle.Location);
+        if (tag.FontName == null || tag.Brush == null)
+        {
+            return;
+        }
+
+        using var font = new Font(tag.FontName, tag.Rectangle.Height, tag.FontStyle, GraphicsUnit.Pixel);
+        graphics.DrawString(tag.Word, font, tag.Brush, tag.Rectangle.Location);
     }
 }

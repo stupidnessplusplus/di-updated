@@ -46,7 +46,7 @@ public class TagsCloudCreator
     private TagDrawing[] GetTagDrawings(IList<Tag> tags)
     {
         var tagDrawings = tags
-            .Select(tag => new TagDrawing(tag, default!, default!, default))
+            .Select(tag => new TagDrawing(tag))
             .ToArray();
 
         return tagsSettingsSetters

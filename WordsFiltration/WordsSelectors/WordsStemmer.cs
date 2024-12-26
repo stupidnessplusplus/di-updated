@@ -1,5 +1,4 @@
 ﻿using MystemSharp;
-using WordsFiltration.Configs;
 
 namespace WordsFiltration.WordsSelectors;
 

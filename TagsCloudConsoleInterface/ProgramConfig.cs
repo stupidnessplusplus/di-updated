@@ -213,7 +213,7 @@ internal class ProgramConfig
     public string FontName
     {
         get => fontName;
-        set
+        private set
         {
             using var installedFonts = new InstalledFontCollection();
 

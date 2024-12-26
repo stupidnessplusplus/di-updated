@@ -10,10 +10,10 @@ internal abstract class TagsDrawingDecoratorTests
 {
     protected static readonly TagDrawing[] tags =
     [
-        new TagDrawing(new Tag("a", default), default!, default!, default),
-        new TagDrawing(new Tag("b", default), default!, "Century", FontStyle.Italic),
-        new TagDrawing(new Tag("c", default), Brushes.White, default!, default),
-        new TagDrawing(new Tag("d", default), Brushes.White, "Century", FontStyle.Italic),
+        new TagDrawing("a", default, default!, default!, default),
+        new TagDrawing("b", default, default!, "Century", FontStyle.Italic),
+        new TagDrawing("c", default, Brushes.White, default!, default),
+        new TagDrawing("d", default, Brushes.White, "Century", FontStyle.Italic),
     ];
 
     protected ITagsDrawingDecorator tagsDecorator = null!;
@@ -43,6 +43,6 @@ internal abstract class TagsDrawingDecoratorTests
 
         decoratedTags.Should().HaveCount(tags.Length);
         decoratedTags.Zip(tags).Should()
-            .AllSatisfy(tagsPair => tagsPair.First.Tag.Should().Be(tagsPair.Second.Tag));
+            .AllSatisfy(tagsPair => tagsPair.First.Word.Should().Be(tagsPair.Second.Word));
     }
 }
