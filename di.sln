@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WordsFiltration_Tests", "Wo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RectanglesCloudPositioning", "RectanglesCloudPositioning\RectanglesCloudPositioning.csproj", "{ED571CA9-869D-462E-BF37-292233669627}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TagsCloudApp_Tests", "TagsCloudApp_Tests\TagsCloudApp_Tests.csproj", "{AE5E83F3-BAA1-4C78-80EB-C2D3A2BF27DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{ED571CA9-869D-462E-BF37-292233669627}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED571CA9-869D-462E-BF37-292233669627}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ED571CA9-869D-462E-BF37-292233669627}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE5E83F3-BAA1-4C78-80EB-C2D3A2BF27DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE5E83F3-BAA1-4C78-80EB-C2D3A2BF27DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE5E83F3-BAA1-4C78-80EB-C2D3A2BF27DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE5E83F3-BAA1-4C78-80EB-C2D3A2BF27DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

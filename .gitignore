@@ -41,3 +41,10 @@ bld/
 msbuild.log
 msbuild.err
 msbuild.wrn
+
+!TagsCloudApp_Tests/[Bb]in/
+!TagsCloudApp_Tests/[Bb]in/[Dd]ebug/
+TagsCloudApp_Tests/[Bb]in/[Dd]ebug/*
+!TagsCloudApp_Tests/[Bb]in/[Dd]ebug/net8.0-windows/
+TagsCloudApp_Tests/[Bb]in/[Dd]ebug/net8.0-windows/*
+!TagsCloudApp_Tests/[Bb]in/[Dd]ebug/net8.0-windows/expected/
