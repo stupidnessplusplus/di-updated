@@ -3,7 +3,7 @@ using TagsCloudCreation.Configs;
 
 namespace TagsCloudCreation.WordSizesGetters;
 
-public class FrequencyProportionalWordSizesGetter : IWordSizesGetter
+public class FrequencyProportionalWordSizesGetter : IWordSizesGetter, IDisposable
 {
     private readonly Image emptyImage = new Bitmap(1, 1);
 
@@ -17,6 +17,11 @@ public class FrequencyProportionalWordSizesGetter : IWordSizesGetter
 
         this.wordSizesGetterConfig = wordSizesGetterConfig;
         this.tagsFontConfig = tagsFontConfig;
+    }
+
+    public void Dispose()
+    {
+        emptyImage.Dispose();
     }
 
     public virtual UnplacedTag[] GetSizes(IList<string> words)

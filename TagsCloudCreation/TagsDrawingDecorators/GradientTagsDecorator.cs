@@ -24,7 +24,7 @@ public class GradientTagsDecorator : ITagsDrawingDecorator
         return tags
             .Select((tag, i) => tag with
             {
-                Brush = new SolidBrush(GetColor(i, tags.Count - 1, colorConfig.MainColor, dr, dg, db)),
+                Color = GetColor(i, tags.Count - 1, colorConfig.MainColor, dr, dg, db),
             })
             .ToArray();
     }

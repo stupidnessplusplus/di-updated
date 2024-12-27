@@ -2,7 +2,6 @@
 using RectanglesCloudPositioning;
 using RectanglesCloudPositioning.Configs;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using TagsCloudApp.Configs;
 using TagsCloudCreation;
 using TagsCloudCreation.Configs;

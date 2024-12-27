@@ -81,12 +81,13 @@ public class TagsDrawer : ITagsDrawer
 
     private void Draw(Graphics graphics, TagDrawing tag)
     {
-        if (tag.FontName == null || tag.Brush == null)
+        if (tag.FontName == null)
         {
             return;
         }
 
+        using var brush = new SolidBrush(tag.Color);
         using var font = new Font(tag.FontName, tag.Rectangle.Height, tag.FontStyle, GraphicsUnit.Pixel);
-        graphics.DrawString(tag.Word, font, tag.Brush, tag.Rectangle.Location);
+        graphics.DrawString(tag.Word, font, brush, tag.Rectangle.Location);
     }
 }

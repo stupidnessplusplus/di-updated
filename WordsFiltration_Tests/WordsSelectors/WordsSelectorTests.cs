@@ -10,7 +10,7 @@ internal abstract class WordsSelectorTests
     [Test]
     public void Select_ThrowsException_WhenWordsEnumerableIsNull()
     {
-        var decorate = () => wordSelector.Select(null!);
-        decorate.Should().Throw<ArgumentNullException>();
+        var select = () => wordSelector.Select(null!);
+        select.Should().Throw<ArgumentNullException>();
     }
 }

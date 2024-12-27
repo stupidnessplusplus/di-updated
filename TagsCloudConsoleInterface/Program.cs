@@ -1,5 +1,7 @@
 ﻿using CommandLine;
 using CommandLine.Text;
+using System.Drawing;
+using System.Runtime.InteropServices;
 using TagsCloudApp;
 
 namespace TagsCloudConsoleInterface;
@@ -25,7 +27,7 @@ public static class Program
         var ioConfig = config as IIOConfig;
         var app = new App(
             () => File.ReadAllText(ioConfig.InputPath),
-            image => image.Save(ioConfig.OutputPath, ioConfig.ImageFormat));
+            image => Save(image, ioConfig));
 
         try
         {
@@ -38,7 +40,7 @@ public static class Program
         }
     }
 
-    public static void DisplayHelp<T>(ParserResult<T> result)
+    private static void DisplayHelp<T>(ParserResult<T> result)
     {
         var helpText = HelpText.AutoBuild(
             result,
@@ -50,5 +52,29 @@ public static class Program
             });
 
         Console.WriteLine(helpText);
+    }
+
+    private static void Save(Bitmap image, IIOConfig ioConfig)
+    {
+        var outputDirectoryName = Path.GetDirectoryName(ioConfig.OutputPath);
+
+        if (!string.IsNullOrEmpty(outputDirectoryName)
+            && !Directory.Exists(outputDirectoryName))
+        {
+            Directory.CreateDirectory(outputDirectoryName!);
+        }
+
+        try
+        {
+            image.Save(ioConfig.OutputPath, ioConfig.ImageFormat);
+        }
+        catch (ExternalException ex)
+        {
+            throw new Exception($"Unable to save image to '{ioConfig.OutputPath}'.", ex);
+        }
+        finally
+        {
+            image.Dispose();
+        }
     }
 }

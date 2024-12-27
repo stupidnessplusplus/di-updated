@@ -17,10 +17,9 @@ public class SingleSolidColorTagsDecorator : ITagsDrawingDecorator
     public TagDrawing[] Decorate(IList<TagDrawing> tags)
     {
         ArgumentNullException.ThrowIfNull(tags);
-
-        var brush = new SolidBrush(colorConfig.MainColor);
+        
         return tags
-            .Select(tag => tag with { Brush = brush })
+            .Select(tag => tag with { Color = colorConfig.MainColor })
             .ToArray();
     }
 }

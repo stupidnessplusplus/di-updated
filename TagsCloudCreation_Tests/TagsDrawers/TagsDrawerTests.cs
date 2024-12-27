@@ -42,7 +42,7 @@ internal class TagsDrawerTests
     {
         var expectedSize = new Size(1, 1);
 
-        var image = tagsDrawer.Draw([]);
+        using var image = tagsDrawer.Draw([]);
 
         image.Size.Should().Be(expectedSize);
     }
@@ -50,7 +50,7 @@ internal class TagsDrawerTests
     [Test]
     public void Draw_SetsImageBackgroundColor()
     {
-        var image = tagsDrawer.Draw([]);
+        using var image = tagsDrawer.Draw([]);
 
         image.GetPixel(0, 0).Should().Be(backgroundColor);
     }

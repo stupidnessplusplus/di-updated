@@ -34,7 +34,6 @@ internal class GradientTagsDecoratorTests : TagsDrawingDecoratorTests
     [Test]
     public void Decorate_SetsTagBrushesColorsInGradientByIndex()
     {
-        var brush = new SolidBrush(configMainColor);
         var expectedColors = new[]
         {
             Color.FromArgb(0, 3, 6),
@@ -45,7 +44,7 @@ internal class GradientTagsDecoratorTests : TagsDrawingDecoratorTests
 
         var decoratedTagsColors = tagsDecorator
             .Decorate(tags)
-            .Select(tag => ((SolidBrush)tag.Brush!).Color);
+            .Select(tag => tag.Color);
 
         decoratedTagsColors.Should().BeEquivalentTo(expectedColors, options => options.WithStrictOrdering());
     }

@@ -12,8 +12,8 @@ internal abstract class TagsDrawingDecoratorTests
     [
         new TagDrawing("a", default, default!, default!, default),
         new TagDrawing("b", default, default!, "Century", FontStyle.Italic),
-        new TagDrawing("c", default, Brushes.White, default!, default),
-        new TagDrawing("d", default, Brushes.White, "Century", FontStyle.Italic),
+        new TagDrawing("c", default, Color.White, default!, default),
+        new TagDrawing("d", default, Color.White, "Century", FontStyle.Italic),
     ];
 
     protected ITagsDrawingDecorator tagsDecorator = null!;

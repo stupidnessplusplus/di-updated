@@ -32,9 +32,8 @@ internal class SingleSolidColorTagsDecoratorTests : TagsDrawingDecoratorTests
     [Test]
     public void Decorate_SetsTagsBrush()
     {
-        var brush = new SolidBrush(configMainColor);
         var expectedTags = tags
-            .Select(tag => tag with { Brush = brush });
+            .Select(tag => tag with { Color = configMainColor });
 
         var decoratedTags = tagsDecorator.Decorate(tags);
 
