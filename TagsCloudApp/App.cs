@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using RectanglesCloudPositioning;
 using RectanglesCloudPositioning.Configs;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using TagsCloudApp.Configs;
 using TagsCloudCreation;
@@ -16,8 +17,16 @@ namespace TagsCloudApp;
 
 public class App
 {
+    private readonly Func<string> readText;
+    private readonly Action<Bitmap> writeImage;
+
+    public App(Func<string> readText, Action<Bitmap> writeImage)
+    {
+        this.readText = readText;
+        this.writeImage = writeImage;
+    }
+
     public void Run(
-        IIOConfig ioConfig,
         IDrawingAlgorithmsConfig algorithmsConfig,
         IWordsSelectionConfig wordsSelectionConfig,
         IWordSizesGetterConfig wordSizesGetterConfig,
@@ -46,34 +55,17 @@ public class App
         var tagsCloudCreator = container.Resolve<TagsCloudCreator>();
         var textSplitter = container.Resolve<TextSplitter>();
 
-        Run(ioConfig, textSplitter, tagsCloudCreator);
+        Run(textSplitter, tagsCloudCreator);
     }
 
     private void Run(
-        IIOConfig ioConfig,
         TextSplitter textSplitter,
         TagsCloudCreator tagsCloudCreator)
     {
-        var text = File.ReadAllText(ioConfig.InputPath);
+        var text = readText();
         var words = textSplitter.SplitToWords(text);
         var image = tagsCloudCreator.DrawTagsCloud(words);
-
-        var outputDirectoryName = Path.GetDirectoryName(ioConfig.OutputPath);
-
-        if (!string.IsNullOrEmpty(outputDirectoryName)
-            && !Directory.Exists(outputDirectoryName))
-        {
-            Directory.CreateDirectory(outputDirectoryName!);
-        }
-
-        try
-        {
-            image.Save(ioConfig.OutputPath, ioConfig.ImageFormat);
-        }
-        catch (ExternalException ex)
-        {
-            throw new Exception($"Unable to save image to '{ioConfig.OutputPath}'.", ex);
-        }
+        writeImage(image);
     }
 
     private void RegisterDrawingAlgorithms(

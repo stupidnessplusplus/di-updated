@@ -1,6 +1,6 @@
 ﻿using System.Drawing.Imaging;
 
-namespace TagsCloudApp.Configs;
+namespace TagsCloudConsoleInterface;
 
 public interface IIOConfig
 {

@@ -1,4 +1,4 @@
-﻿namespace TagsCloudApp;
+﻿namespace TagsCloudConsoleInterface;
 
 public enum OutputImageFormat
 {

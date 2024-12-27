@@ -22,10 +22,15 @@ public static class Program
 
     private static void Run(ProgramConfig config)
     {
+        var ioConfig = config as IIOConfig;
+        var app = new App(
+            () => File.ReadAllText(ioConfig.InputPath),
+            image => image.Save(ioConfig.OutputPath, ioConfig.ImageFormat));
+
         try
         {
-            new App().Run(config, config, config, config, config, config, config);
-            Console.WriteLine($"Image saved to '{config.OutputPath}'.");
+            app.Run(config, config, config, config, config, config);
+            Console.WriteLine($"Image saved to '{ioConfig.OutputPath}'.");
         }
         catch (Exception ex)
         {
